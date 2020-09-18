@@ -4,16 +4,19 @@ void control_motor(e_motor_control choice, int pwm){
   bool ina,inb,sel;
   switch(choice){
     case UP:
+      Serial.println(F("motor:|move_up|"));
       ina = HIGH;
       inb = LOW;
       sel = LOW;
       break;
     case DOWN:
+      Serial.println(F("motor:|move_down|"));
       ina = LOW;
       inb = HIGH;
       sel = HIGH;
       break;
     case STOP:
+    Serial.println(F("motor:|stop|"));
       ina = LOW;
       inb = LOW;
       sel = HIGH;

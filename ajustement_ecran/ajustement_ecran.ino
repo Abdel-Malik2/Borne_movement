@@ -1,10 +1,24 @@
 #include <Wire.h> //Native librairy
 #include <neotimer.h> //Joe Rullan library
 #include "pin_define.h"
+#include "enums.h"
 #include "sensors.h"
 
 VL53L0X sensor_up = VL53L0X();
 VL53L0X sensor_down = VL53L0X();
+
+/** Timer **/
+Neotimer timeout_up = Neotimer(500);
+Neotimer timeout_down = Neotimer(500);
+
+Neotimer timeout_move_up = Neotimer(2500);
+Neotimer timeout_move_down = Neotimer(5000);
+
+Neotimer timeout_presence_out = Neotimer(5000);
+Neotimer timeout_presence_in = Neotimer(2500);
+
+e_state state = screen_reset;
+e_screen_pos screen_pos = unknown;
 
 void setup() {
   Serial.begin(9600);
