@@ -10,7 +10,16 @@
 #define ADR_SENSOR_2 0x42
 
 //Pins pour connexion I2C
-#define SCL_Wire PA7    //A6
-#define SDA_Wire PB4    //D12
+#define SCL_Wire PA7      //A6
+#define SDA_Wire PB4      //D12
+
+#define interrupter PB7   //D4
+
+//Motor control chip information
+#define InA PB6           //D5
+#define InB PB1           //D6
+#define SEL PA11          //D10
+#define PWM PA8           //D9
+
 
 #endif
