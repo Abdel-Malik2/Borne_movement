@@ -32,6 +32,4 @@ void prepareSensor(byte pin, bool stat);
 void initSensor(VL53L0X *sensor, byte pin, uint8_t adr);
 void ISR(void);
 
-
-
 #endif
