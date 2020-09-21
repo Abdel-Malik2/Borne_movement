@@ -1,7 +1,19 @@
 #ifndef SENSORS_H
-#define SENSORS_H
+# define SENSORS_H
 
-#include <VL53L0X.h> //Pololu library
+# include <VL53L1X.h> //Pololu library
+
+
+// sensor error
+# define ERROR_SENSOR_TIMEOUT 0xFFFF
+
+// Max detection distance 
+# define  THRESHOLDDISTANCE 800
+// Min detection distance
+# define  THRESHOLDDISTANCEMIN 50
+// default detection distance
+# define  DEFAULTDISTANCE (THRESHOLDDISTANCE + 500)
+
 
 /** Put sensors in a 'off' or 'sleep' state. 
  *  Its required for assigning new I2C adresses individually
@@ -15,6 +27,6 @@ void prepareSensor(byte pin, bool stat);
  *            pin : The hardware pin connect to the sensor XSHUT
  *            adr : The new sensor address for I2C connection
 **/
-void initSensor(VL53L0X *sensor, byte pin, uint8_t adr);
+void initSensor(VL53L1X *sensor, byte pin, uint8_t adr);
 
 #endif

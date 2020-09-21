@@ -16,15 +16,26 @@ void prepareSensor(byte pin, bool stat)
   digitalWrite(pin, stat);
 }
 
-void initSensor(VL53L0X *sensor, byte pin, uint8_t adr)
-{                           // commentary section is for VL53L1X
-  pinMode(pin, INPUT);
-  delay(200);
-  sensor->init(); //sensor->init(true);
-  delay(100);
-  sensor->setAddress(adr);
-  sensor->setTimeout(500);//sensor->setTimeout((uint16_t)500);
-  //  sensor->setDistanceMode(VL53L0X::Medium);
-  //  sensor->setMeasurementTimingBudget(33000);
-  sensor->startContinuous(); //  sensor->startContinuous(50);
+void initSensor(VL53L1X *sensor, byte pin, uint8_t adr)
+{                           // commentary section is for VL53L0X
+    pinMode(pin, INPUT);
+    delay(200);
+    Serial.print("\nINIT SENSOR");
+    //   sensor->init();
+    if (!sensor->init(true))
+    {
+        Serial.println(" ERROR");
+        delay(100);
+        NVIC_SystemReset();
+    }
+        Serial.println(" OK");
+
+    delay(100);
+    sensor->setAddress(adr);
+    // sensor->setTimeout(500);
+    sensor->setTimeout((uint16_t)500);
+    sensor->setDistanceMode(VL53L1X::Medium);
+    sensor->setMeasurementTimingBudget(33000);
+    // sensor->startContinuous();
+    sensor->startContinuous(50);
 }
