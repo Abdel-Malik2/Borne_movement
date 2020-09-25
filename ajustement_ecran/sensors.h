@@ -3,6 +3,16 @@
 
 #include <VL53L0X.h> //Pololu library
 
+// sensor error
+#define ERROR_SENSOR_TIMEOUT 0xFFFF
+
+// Max detection distance 
+#define THRESHOLDDISTANCE 800
+// Min detection distance
+#define THRESHOLDDISTANCEMIN 50
+// default detection distance
+#define DEFAULTDISTANCE (THRESHOLDDISTANCE + 500)
+
 /** Put sensors in a 'off' or 'sleep' state. 
  *  Its required for assigning new I2C adresses individually
  */

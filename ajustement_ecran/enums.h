@@ -7,9 +7,8 @@
 enum e_state {
   idle,
   person_detected,
-  move_up,
-  move_down,
-  move_stop,
+  fiting,
+  in_use,
   screen_reset
 };
 
