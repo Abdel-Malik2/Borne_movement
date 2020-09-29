@@ -130,12 +130,12 @@ void setup() {
   Wire.setSCL(SCL_Wire);
   Wire.setSDA(SDA_Wire);
   Wire.begin();
-  
+
   turn_off_sensors();
   delay(100);
   prepareSensor(PIN_XSHUT_1, HIGH);
   initSensor(&sensor_up, PIN_XSHUT_1, ADR_SENSOR_1);
-  prepareSensor(PIN_XSHUT_2, HIGH);  
+  prepareSensor(PIN_XSHUT_2, HIGH);
   initSensor(&sensor_down, PIN_XSHUT_2, ADR_SENSOR_2);
 }
 

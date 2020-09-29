@@ -7,7 +7,7 @@
 #define ERROR_SENSOR_TIMEOUT 0xFFFF
 
 // Max detection distance 
-#define THRESHOLDDISTANCE 800
+#define THRESHOLDDISTANCE 1000
 // Min detection distance
 #define THRESHOLDDISTANCEMIN 50
 // default detection distance
