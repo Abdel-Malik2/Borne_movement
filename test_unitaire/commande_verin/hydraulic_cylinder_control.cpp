@@ -1,11 +1,5 @@
 #include "hydraulic_cylinder_control.h"
 
-void initialise_pinmode(){
-  pinMode(InA, OUTPUT);
-  pinMode(InB, OUTPUT);
-  pinMode(SEL ,OUTPUT);
-  pinMode(PWM ,OUTPUT);
-}
 void control_motor(e_motor_control choice, int pwm){
   bool ina,inb,sel;
   switch(choice){
@@ -31,4 +25,12 @@ void control_motor(e_motor_control choice, int pwm){
   digitalWrite(InA,ina);
   digitalWrite(InB,inb);
   digitalWrite(SEL,sel);
+  Serial.print("p=");
+  Serial.println(pwm);
+  Serial.print("InA=");
+  Serial.println(ina);
+  Serial.print("InB=");
+  Serial.println(inb);
+  Serial.print("sel=");
+  Serial.println(sel);
 }

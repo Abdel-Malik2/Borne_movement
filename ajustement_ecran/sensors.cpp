@@ -6,7 +6,7 @@ void turn_off_sensors(){
   pinMode(PIN_XSHUT_1, OUTPUT);
   digitalWrite(PIN_XSHUT_1, LOW);
   //sensor_down
-  pinMode(PIN_XSHUT_1, OUTPUT);
+  pinMode(PIN_XSHUT_2, OUTPUT);
   digitalWrite(PIN_XSHUT_2, LOW);
 }
 
@@ -17,14 +17,17 @@ void prepareSensor(byte pin, bool stat)
 }
 
 void initSensor(VL53L0X *sensor, byte pin, uint8_t adr)
-{                           // commentary section is for VL53L1X
+{
   pinMode(pin, INPUT);
   delay(200);
-  sensor->init(); //sensor->init(true);
+  Serial.println(F("Init - sensor"));
+  while(!sensor->init()){
+    Serial.println(F("Initialisation Failed"));
+    delay(100);
+  }
+  Serial.println(F("Initialisation completed"));
   delay(100);
   sensor->setAddress(adr);
-  sensor->setTimeout(500);//sensor->setTimeout((uint16_t)500);
-  //  sensor->setDistanceMode(VL53L0X::Medium);
-  //  sensor->setMeasurementTimingBudget(33000);
-  sensor->startContinuous(); //  sensor->startContinuous(50);
+  sensor->setTimeout(500);
+  sensor->startContinuous(50);
 }

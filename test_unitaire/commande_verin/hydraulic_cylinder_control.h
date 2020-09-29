@@ -3,6 +3,5 @@
 #include <Arduino.h>
 #include "pin_define.h"
 #include "enums.h"
-void initialise_pinmode();
 void control_motor(e_motor_control choice, int pwm = 255);
 #endif
