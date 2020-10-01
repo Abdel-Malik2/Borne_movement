@@ -8,27 +8,31 @@ void initialise_pinmode(){
 }
 void control_motor(e_motor_control choice, int pwm){
   bool ina,inb,sel;
+      Serial.print(F("motor: "));
+
   switch(choice){
     case UP:
-      Serial.println(F("motor:|move_up|"));
+      Serial.println(F("Up"));
       ina = HIGH;
       inb = LOW;
       sel = LOW;
       break;
     case DOWN:
-      Serial.println(F("motor:|move_down|"));
+      Serial.println(F("Down"));
       ina = LOW;
       inb = HIGH;
       sel = HIGH;
       break;
     case STOP:
-    Serial.println(F("motor:|stop|"));
+      Serial.println(F("Stop"));
       ina = LOW;
       inb = LOW;
       sel = HIGH;
+      break;
   }
   analogWrite(PWM,pwm);
   digitalWrite(InA,ina);
   digitalWrite(InB,inb);
   digitalWrite(SEL,sel);
+  delay(100);
 }

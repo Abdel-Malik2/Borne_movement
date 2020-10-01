@@ -26,11 +26,11 @@ void control_motor(e_motor_control choice, int pwm){
   digitalWrite(InB,inb);
   digitalWrite(SEL,sel);
   Serial.print("p=");
-  Serial.println(pwm);
-  Serial.print("InA=");
-  Serial.println(ina);
-  Serial.print("InB=");
-  Serial.println(inb);
-  Serial.print("sel=");
+  Serial.print(pwm);
+  Serial.print(", InA=");
+  Serial.print(ina);
+  Serial.print(", InB=");
+  Serial.print(inb);
+  Serial.print(", sel=");
   Serial.println(sel);
 }

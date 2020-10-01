@@ -46,28 +46,17 @@ uint16_t getDistance(VL53L0X *sensor)
 bool getAdjust(void) // true if a body is see by the sensor
 {
   uint16_t distance_up;
-  bool adjust = false;
 
     distance_up = getDistance(&sensor_up);
-    Serial.print("GET ADJUST: sensor up distance: ");
-    Serial.println(distance_up);
-    if(distance_up > THRESHOLDDISTANCEMIN)
-        adjust = distance_up < THRESHOLDDISTANCE;
-    Serial.print(" ADJUST? : ");
-    if (adjust)
-    {
-
-        // printDistance(distance_up);// debug
-        Serial.print(" true! ");
-        return (true);
-    }
-        Serial.print(" false! ");
-    return (false);
+    Serial.print("GET ADJUST: sensor up distance: ");//debug
+    Serial.println(distance_up);//debug
+    return (distance_up > THRESHOLDDISTANCEMIN
+       && distance_up < THRESHOLDDISTANCE);
 }
 
 void printDistance(uint16_t distance_down) //debug
 {
-    Serial.print(" sensor :\t");
+    Serial.print(" sensor: ");
         if (distance_down != ERROR_SENSOR_TIMEOUT)
         Serial.print(distance_down);
     Serial.print(" ");
@@ -75,7 +64,7 @@ void printDistance(uint16_t distance_down) //debug
 
 void updatePresence(void)
 {
-  uint16_t distance_down;
+    uint16_t distance_down;
 
     distance_down = getDistance(&sensor_down);
     printDistance(distance_down);// debug
@@ -83,7 +72,7 @@ void updatePresence(void)
     if (distance_down > THRESHOLDDISTANCEMIN
         && distance_down < THRESHOLDDISTANCE)
     {
-        if(!timeout_presence_in.started())
+        if (!timeout_presence_in.started())
         {
             timeout_presence_in.start();
             presence = false;
@@ -96,7 +85,7 @@ void updatePresence(void)
     }
     else
     {
-        if(!timeout_presence_out.started())
+        if (!timeout_presence_out.started())
             timeout_presence_out.start();
         if (timeout_presence_out.done())
         {
@@ -113,76 +102,115 @@ void updatePresence(void)
     }
 }
 
-
 void caseIdle(void)
 {
     order = STOP;
     control_motor(order);
-    screen_pos = origin;
     resetTimers();
     if (presence)
         state = fiting;
-        // state = person_detected;
 }
-
-// void casePersonDetected(void)
-// {
-//     if (!presence)
-//         state = screen_reset;
-//     else if(timeout_presence_in.done())
-//     {
-//         timeout_presence_in.reset();
-//         timeout_presence_in.stop();
-//         state = fiting;
-//     }
-// }
 
 void caseFiting(void)
 {
-  e_motor_control old_order = order;
-  bool b = getAdjust();
-  if(b)
-    order = UP;
-  else
-    order = DOWN;
+    e_motor_control old_order = order;
 
-    
-  if(old_order != STOP)
-    if(old_order != order){
-      order = STOP;
-      state = in_use;
+    order = (getAdjust()) ? UP : DOWN;
+    if (old_order != STOP && old_order != order)
+    {
+        screen_pos = (order) ? above : under;
+        order = STOP;
+        state = in_use;
     }
-    Serial.print("old order: ");
-    Serial.print(old_order);
-    Serial.print(", order: ");
-    Serial.println(order);
   control_motor(order);
 }
 
-void resetScreen(){
-  if (screen_pos == unknown) {
-    if(!timeout_move_up.started()
-    && !timeout_move_up.done()){
+void print_screen_pos(e_screen_pos screen_pos) //debug
+{
+    Serial.print(" SCREEN POSITION => ");
+    switch (screen_pos)
+    {
+        case unknown:
+        {
+            Serial.print(F("unknown"));
+            break;
+        }
+        case origin:
+        {
+            Serial.print(F("origin"));
+            break;
+        }
+        case above:
+        {
+            Serial.print(F("above"));
+            break;
+        }
+        case under:
+        {
+            Serial.print(F("under"));
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void print_order(e_motor_control order) //debug
+{
+    Serial.print(" ORDER => ");
+    switch (order)
+    {
+        case UP:
+        {
+            Serial.print(F("UP\t"));
+            break;
+        }
+        case DOWN:
+        {
+            Serial.print(F("DOWN\t"));
+            break;
+        }
+        case STOP:
+        {
+            Serial.print(F("STOP\t"));
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void resetScreen()
+{
+    Serial.print("RESET SCREEN: ");
+
+    if (screen_pos == unknown)
+    {
         order = UP;
-        timeout_move_up.start();
+        if(!timeout_move_up.started())
+            timeout_move_up.start();
+        else if (timeout_move_up.done())
+        {
+            order = DOWN;
+            if(!timeout_move_down.started())
+                timeout_move_down.start();        }
     }
-    if(timeout_move_up.done()
-    && !timeout_move_down.started()){
-        timeout_move_down.start();
+    else if (screen_pos == above)
         order = DOWN;
+    else if (screen_pos == under)
+    {
+        order = UP;
     }
-  }
-  else if (screen_pos == above)
-      order = DOWN;
-  else if (screen_pos == under)
-      order = UP;
-  control_motor(order);
+    else if (screen_pos == origin)
+        state = idle;
+
+    print_order(order); //debug
+    print_screen_pos(screen_pos);//debug
+    control_motor(order);
 }
 
 void caseInUse()
 {
-    order = STOP;
-    control_motor(order);
     if (!presence)
     {
         resetTimers();
@@ -196,25 +224,32 @@ void printState(void)
         Serial.print(F("presence,\t"));
     else
         Serial.print(F("!presence,\t"));
-    Serial.print("state: ");
+    Serial.print(F("state: "));
     switch (state)
     {
         case idle:
-            Serial.println(F("idle"));
+        {
+            Serial.println(F("Idle"));
             break;
+        }
         case fiting:
-            Serial.println(F("fiting"));
+        {
+            Serial.println(F("Fiting"));
             break;
+        }
         case in_use:
-            Serial.println(F("in_use"));
-        case screen_reset:
-            Serial.println(F("screen_reset"));
+        {
+            Serial.println(F("In Use"));
             break;
+        }
+        case screen_reset:
+        {
+            Serial.println(F("Screen Reset"));
+            break;
+        }
         default:
             break;
     }
-
-
 }
 
 void computeState(void)
@@ -224,16 +259,23 @@ void computeState(void)
     switch (state)
     {
         case idle:
+        {
             caseIdle();
             break;
+        }
         case fiting:
+        {
             caseFiting();
             break;
         case in_use:
             caseInUse();
+            break;
+        }
         case screen_reset:
+        {
             resetScreen();
             break;
+        }
         default:
             break;
     }
@@ -244,46 +286,57 @@ void initTimer(void)
     timeout_presence_out.start();
 }
 
-void setup() {
-  Serial.begin(9600);
-  Serial.println(F("setup start"));
-  attachInterrupt(digitalPinToInterrupt(interrupter), ISR, RISING);
-  initialise_pinmode();
-  Wire.setSCL(SCL_Wire);
-  Wire.setSDA(SDA_Wire);
-  Wire.begin();
-
-  turn_off_sensors();
-  delay(100);
-  prepareSensor(PIN_XSHUT_1, HIGH);
-  initSensor(&sensor_up, PIN_XSHUT_1, ADR_SENSOR_1);
-  prepareSensor(PIN_XSHUT_2, HIGH);
-  initSensor(&sensor_down, PIN_XSHUT_2, ADR_SENSOR_2);
-
+void setup()
+{
+    Serial.begin(9600);
+    Serial.println(F("setup start"));
+    attachInterrupt(digitalPinToInterrupt(interrupter), ISR, RISING);
+    initialise_pinmode();
+    Wire.setSCL(SCL_Wire);
+    Wire.setSDA(SDA_Wire);
+    Wire.begin();
+    turn_off_sensors();
+    delay(100);
+    prepareSensor(PIN_XSHUT_1, HIGH);
+    initSensor(&sensor_up, PIN_XSHUT_1, ADR_SENSOR_1);
+    prepareSensor(PIN_XSHUT_2, HIGH);
+    initSensor(&sensor_down, PIN_XSHUT_2, ADR_SENSOR_2);
     initTimer();
-
-  Serial.println(F("setup completed"));
+    Serial.println(F("setup completed"));
 }
 
-void loop() {
-  computeState();
-  delay(200);
+void loop()
+{
+    computeState();
+    delay(200);
 }
 
 /*
  * The method will run when the interrupter is on.
  */
-void ISR() {
-  switch(state){
-    case screen_reset:
-      state = idle;
-     case fiting:
-      if(order == UP)
-        screen_pos = above;
-      if(order == DOWN)
-        screen_pos = under;
-    break;
-  }
-  Serial.print(" ISR : ");
-  printState();
+void ISR()
+{
+    switch(state)
+    {
+        case screen_reset:
+        {
+            state = idle;
+            resetTimers();
+            screen_pos = origin;
+            order = STOP;
+            break;
+        }
+        case fiting:
+        {
+            if(order == UP)
+                screen_pos = above;
+            if(order == DOWN)
+                screen_pos = under;
+            break;
+        }
+        default:
+            break;
+    }
+    Serial.print(" ISR : ");
+    printState();
 }
