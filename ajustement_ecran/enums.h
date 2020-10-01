@@ -6,7 +6,7 @@
  */
 enum e_state {
   idle,
-  person_detected,
+//   person_detected,
   fiting,
   in_use,
   screen_reset

@@ -15,6 +15,6 @@ void setup() {
 }
 
 void loop() {
-  control_motor(STOP);
+  control_motor(DOWN);
   delay(500);
 }
