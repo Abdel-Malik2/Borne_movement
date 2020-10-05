@@ -1,4 +1,4 @@
-#include "pin_define.h"
+#include "pin_define_types.h"
 #include "enums.h"
 #include "hydraulic_cylinder_control.h"
 

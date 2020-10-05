@@ -1,0 +1,11 @@
+NEOTIMER LIBRARY MODIFICATION
+
+Move definitions to cpp file
+
+~/Documents/Arduino/libraries/Neotimer » ls                                                                                                                      
+README.md          examples           keywords.txt       library.properties license.txt        neotimer.cpp       neotimer.h
+
+
+Without this, trying to use the library from another library will raise multiple definition errors for every class method.
+
+https://github.com/jrullan/neotimer/pull/15
