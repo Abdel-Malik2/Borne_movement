@@ -15,8 +15,8 @@ bool getAdjust(void) // true if a body is see by the sensor
   uint16_t distance_up;
 
     distance_up = getDistance(&sensor_up);
-    Serial.print(F("GET ADJUST: sensor up distance: "));//debug
-    Serial.println(distance_up);//debug
+    printDistance(distance_up);
+    Serial.println(F("(up)"));
     return (distance_up > THRESHOLDDISTANCEMIN
        && distance_up < THRESHOLDDISTANCE);
 }
@@ -26,8 +26,8 @@ void updatePresence(void)
     uint16_t distance_down;
 
     distance_down = getDistance(&sensor_down);
-    printDistance(distance_down);// debug
-    Serial.print(F("(sensor down) ")); //debug
+    printDistance(distance_down);
+    Serial.print(F("(down) "));
     if (distance_down > THRESHOLDDISTANCEMIN
         && distance_down < THRESHOLDDISTANCE)
     {

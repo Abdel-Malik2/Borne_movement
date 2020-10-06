@@ -45,8 +45,6 @@ void caseFiting(void)
 
 void resetScreen()
 {
-    Serial.print(F("RESET SCREEN: "));
-
     if (screen_pos == unknown)
     {
         order = UP;
@@ -68,7 +66,7 @@ void resetScreen()
     else if (screen_pos == origin)
         state = idle;
 
-    print_order(order); //debug
+    printOrder(order); //debug
     printScreenPos(screen_pos);//debug
     control_motor(order);
 }
@@ -89,23 +87,17 @@ void computeState(void)
     switch (state)
     {
         case idle:
-        {
             caseIdle();
             break;
-        }
         case fiting:
-        {
             caseFiting();
             break;
         case in_use:
             caseInUse();
             break;
-        }
         case screen_reset:
-        {
             resetScreen();
             break;
-        }
         default:
             break;
     }

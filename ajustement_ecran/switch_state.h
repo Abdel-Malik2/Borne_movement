@@ -9,7 +9,5 @@
 # include "hydraulic_cylinder_control.h"
 # include "check_presence.h"
 
-// extern bool presence;
-
 void computeState(void);
 #endif

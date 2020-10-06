@@ -18,6 +18,7 @@ e_state         state = screen_reset;
 e_screen_pos    screen_pos = unknown;
 e_motor_control order = STOP;
 
+/** Timer move screen **/
 bool            presence = false;
 
 VL53L0X         sensor_up = VL53L0X();
