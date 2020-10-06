@@ -3,7 +3,7 @@
 void caseIdle(void)
 {
     order = STOP;
-    control_motor(order);
+    controlMotor(order);
     resetTimers();
     if (presence)
         state = fiting;
@@ -23,6 +23,14 @@ void caseFiting(void)
 {
     e_motor_control old_order = order;
 
+    if (!presence)
+    {
+        resetTimers();
+        resetTimer(&timeout_fiting_down);
+        resetTimer(&timeout_fiting_up);
+        state = screen_reset;
+        return;
+    }
     order = (getAdjust()) ? UP : DOWN;
     if (old_order != STOP && old_order != order)
         setInUseState();
@@ -33,17 +41,17 @@ void caseFiting(void)
         else if (timeout_fiting_up.done())
             setInUseState(above);
     }
-    if (order == DOWN)
+    else if (order == DOWN)
     {
         if(!timeout_fiting_down.started())
             timeout_fiting_down.start();
         else if (timeout_fiting_down.done())
             setInUseState(under);
     }
-    control_motor(order);
+    controlMotor(order);
 }
 
-void resetScreen()
+void resetScreen(void)
 {
     if (screen_pos == unknown)
     {
@@ -66,12 +74,12 @@ void resetScreen()
     else if (screen_pos == origin)
         state = idle;
 
-    printOrder(order); //debug
-    printScreenPos(screen_pos);//debug
-    control_motor(order);
+    printOrder(order);
+    printScreenPos(screen_pos);
+    controlMotor(order);
 }
 
-void caseInUse()
+void caseInUse(void)
 {
     if (!presence)
     {

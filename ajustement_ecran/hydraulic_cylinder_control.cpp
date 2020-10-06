@@ -6,7 +6,7 @@ void initialise_pinmode(){
   pinMode(SEL ,OUTPUT);
   pinMode(PWM ,OUTPUT);
 }
-void control_motor(e_motor_control choice, int pwm){
+void controlMotor(e_motor_control choice, int pwm){
   bool ina,inb,sel;
       Serial.print(F("motor: "));
 

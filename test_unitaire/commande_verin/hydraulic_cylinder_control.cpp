@@ -1,6 +1,6 @@
 #include "hydraulic_cylinder_control.h"
 
-void control_motor(e_motor_control choice, int pwm){
+void controlMotor(e_motor_control choice, int pwm){
   bool ina,inb,sel;
   switch(choice){
     case UP:

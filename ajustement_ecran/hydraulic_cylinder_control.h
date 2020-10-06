@@ -9,6 +9,6 @@ extern e_screen_pos     screen_pos;
 extern e_motor_control  order;
 
 void initialise_pinmode();
-void control_motor(e_motor_control choice, int pwm = 255);
+void controlMotor(e_motor_control choice, int pwm = 255);
 
 #endif

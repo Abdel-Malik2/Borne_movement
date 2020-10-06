@@ -31,32 +31,48 @@ void updatePresence(void)
     if (distance_down > THRESHOLDDISTANCEMIN
         && distance_down < THRESHOLDDISTANCE)
     {
+        Serial.print(F(" distance find, "));
         if (!timeout_presence_in.started())
         {
             timeout_presence_in.start();
             presence = false;
+            Serial.print(F(" timeout_in START"));
         }
         else if (timeout_presence_in.done())
+        {
+
+            Serial.print(F(" timeout_in DONE"));
             presence = true;
+        }
         else
+        {
+            Serial.print(F(" timeout_in CONTINU"));
             presence = false;
+        }
         resetTimer(&timeout_presence_out);
     }
     else
     {
+        Serial.print(F(" distance NOT find, "));
         if (!timeout_presence_out.started())
+        {
+            Serial.print(F("timeout_out start "));
             timeout_presence_out.start();
+        }
         if (timeout_presence_out.done())
         {
+          Serial.print(F("timeout_out done"));
           resetTimer(&timeout_presence_out);
-          presence = false;
           resetTimer(&timeout_presence_in);
-          
+          presence = false;
         }
         else if (timeout_presence_in.waiting())
         {
+            Serial.print(F("timeout_in continu (waiting)"));
             resetTimer(&timeout_presence_in);
-            presence = true;
+            // presence = true;
         }
     }
+    Serial.println(F(" updatePresence finish"));
+
 }

@@ -19,7 +19,7 @@ void setup() {
 }
 
 void loop() {
-  control_motor(DOWN);
+  controlMotor(DOWN);
   delay(500);
 }
 
