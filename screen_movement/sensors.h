@@ -1,6 +1,5 @@
 #ifndef SENSORS_H
 # define SENSORS_H
-<<<<<<< HEAD:screen_movement/sensors.h
 
 # include <VL53L0X.h> //Pololu library
 # include "screen_timer.h"
