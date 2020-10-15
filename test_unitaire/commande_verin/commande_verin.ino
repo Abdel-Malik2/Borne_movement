@@ -1,10 +1,4 @@
-#include "pin_define_types.h"
-#include "enums.h"
 #include "hydraulic_cylinder_control.h"
-
-#define interrupter PB7   //D4
-
-e_motor_control order = STOP;
 
 void setup() {
   Serial.begin(9600);
@@ -19,8 +13,14 @@ void setup() {
 }
 
 void loop() {
-  controlMotor(DOWN);
-  delay(500);
+    controlMotor(UP,100);
+    delay(1500);
+    controlMotor(STOP);
+    delay(3500);
+    controlMotor(DOWN, 50);
+    delay(3000);
+    controlMotor(STOP);
+    delay(3000);
 }
 
 void ISR()
