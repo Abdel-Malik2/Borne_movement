@@ -1,5 +1,5 @@
-#ifndef AJUSTEMENT_ECRAN_H
-# define AJUSTEMENT_ECRAN_H
+#ifndef SCREEN_MOVEMENT_H
+# define SCREEN_MOVEMENT_H
 
 # include <Arduino.h>
 # include <Wire.h> //Native librairy
